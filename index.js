@@ -4,9 +4,21 @@ const session = require('express-session');
 const FileStore = require('session-file-store')(session);
 const flash = require('express-flash');
 
+//Import Controllers
+const ThoughtsController = require('./controllers/ThoughtsController');
+
+//Import Routes
+const thoughtsRoutes = require('./routes/thoughtsRoute');
+const authRoutes = require('./routes/authRoute');
+
 const oneDay = 1000 * 24 * 60 * 60;
 
 const app = express();
+
+//Models
+const Thought = require('./models/Thought');
+const User = require('./models/User');
+
 app.engine('handlebars', handlebars.engine());
 app.set('view engine', 'handlebars');
 
@@ -14,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //setting assets
-app.use(express.static('/public'));
+app.use(express.static('public'));
 
 //Sessions
 app.use(
@@ -49,6 +61,12 @@ app.use((req, res, next) => {
 });
 
 const database = require('./db/connection');
+
+// Routes
+app.use('/thoughts', thoughtsRoutes);
+app.use('/', authRoutes);
+
+app.get('/', ThoughtsController.showThoughts);
 
 database
   .sync()
