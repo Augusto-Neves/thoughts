@@ -37,6 +37,64 @@ module.exports = class ThoughtsController {
     res.render('thoughts/create');
   }
 
+  static async editThought(req, res) {
+    const id = req.params.id;
+
+    const thought = await Thought.findOne({
+      where: { id: id },
+      raw: true,
+    });
+
+    res.render('thoughts/edit', { thought });
+  }
+
+  static async updateThought(req, res) {
+    const { id, title, userId } = req.body;
+    const sessionUserId = req.session.userId;
+
+    // verifications
+    if (!title) {
+      req.flash('message', 'Por favor digite seu pensamento!');
+
+      req.session.save(() => {
+        res.redirect('/thoughts/edit/' + id);
+      });
+
+      return;
+    }
+
+    if (Number(userId) !== sessionUserId) {
+      req.flash(
+        'message',
+        'Impossível editar pensamento, esse pensamento não pertence a seu usuário.'
+      );
+
+      req.session.save(() => {
+        res.redirect('/thoughts/edit/' + id);
+      });
+
+      return;
+    }
+
+    const updatedThought = {
+      title,
+    };
+
+    try {
+      await Thought.update(updatedThought, {
+        where: { id, UserId: userId },
+      });
+
+      req.flash('message', 'Pensamento editado com sucesso!');
+
+      req.session.save(() => {
+        res.redirect('/thoughts/dashboard');
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   static async saveThought(req, res) {
     const { title } = req.body;
     const userId = req.session.userId;

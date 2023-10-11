@@ -7,6 +7,8 @@ const ThoughtsController = require('../controllers/ThoughtsController');
 
 router.get('/add', isUserAuthenticated, ThoughtsController.createThought);
 router.post('/add', isUserAuthenticated, ThoughtsController.saveThought);
+router.get('/edit/:id', isUserAuthenticated, ThoughtsController.editThought);
+router.post('/edit', isUserAuthenticated, ThoughtsController.updateThought);
 router.get(
   '/dashboard',
   isUserAuthenticated,

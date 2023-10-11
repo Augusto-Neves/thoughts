@@ -1,0 +1,23 @@
+<div class='thought-form-container'>
+  <a href='/thoughts/dashboard'>Voltar</a>
+  <h1>Editando um pensamento:</h1>
+  <form action='/thoughts/edit' method='post'>
+    <div class='form-control'>
+      <label for='title'>Pensamento</label>
+      <input type='hidden' name='id' id='id' value='{{thought.id}}' />
+      <input
+        type='hidden'
+        name='userId'
+        id='userId'
+        value='{{thought.UserId}}'
+      />
+      <textarea
+        name='title'
+        id='title'
+        placeholder='Digite seu pensamento'
+        required
+      >{{thought.title}}</textarea>
+    </div>
+    <input type='submit' value='Editar Pensamento' />
+  </form>
+</div>
