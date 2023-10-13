@@ -59,6 +59,10 @@
   padding: 2em;
 }
 
+ .container blockquote::selection {
+  background: #f6982d;
+}
+
 /* LOGIN E REGISTER */
 .auth-container {
   max-width: 450px;
